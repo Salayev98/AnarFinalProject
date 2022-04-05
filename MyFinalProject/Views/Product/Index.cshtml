@@ -1,0 +1,193 @@
+﻿@model ProductViewModel
+<main>
+    <!-- breadcrumb area start -->
+    <div class="shop-area bg-img" >
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="shop-title text-center">
+                        <nav aria-label="shop">
+                            <h1 class="shop-title">shop</h1>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb area end -->
+    <!-- page main wrapper start -->
+    <div class="shop-main-wrapper section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- sidebar area start -->
+                <div class="col-lg-3 order-2 order-lg-1">
+                    <div class="sidebar-wrapper">
+                        <!-- single sidebar start -->
+                        <div class="sidebar-items">
+                            <div class="sidebar-item">
+                                <h3>Categories</h3>
+                            </div>
+                            <div class="sidebar-body">
+                                <ul class="color-list">
+                                    @foreach (var item in Model.Categories)
+                                    {
+                                        
+                                     <li>
+                                        <div class="form-check">
+                                            <input form="FormFilter" @((ViewBag.CategoryId==item.Id)?"checked":"") class="form-check-input" type="radio" name="categoryid" value="@item.Id" id="category-@item.Id">
+                                            <label class="form-check-label" for="categoryid">
+                                                @item.Name  <span>(@item.Products.Count)</span>
+                                            </label>
+                                        </div>
+                                     </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- single sidebar end -->
+                        <!-- single sidebar start -->
+                        <div class="single-block">
+                            <input type="hidden" form="FormFilter" name="minPrice" id="minPriceInput" />
+                            <input type="hidden" form="FormFilter" name="maxPrice" id="maxPriceInput" />
+                            <h3 class="sidebar-title">Fillter By Price</h3>
+                            <div class="range-slider pt--30">
+                                <div class="sb-range-slider"></div>
+                                <div class="slider-price">
+                                    <p>
+                                        <input type="text" id="amount" readonly="">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- single sidebar end -->
+                        <div class="sidebar-items">
+                            <div class="sidebar-item">
+                                <h3>Brand</h3>
+                            </div>
+                            <div class="sidebar-body">
+                                <ul class="color-list">
+                                    @foreach (var item in Model.Brands)
+                                    {
+                                     <li>
+                                        <div class="form-check">
+                                            <input form="FormFilter" @((ViewBag.CategoryId==item.Id)?"checked":"") class="form-check-input" type="radio" name="brandid" value="@item.Id" id="brand-@item.Id">
+                                            <label class="form-check-label" for="brandid">
+                                                @item.Name  <span>(@item.Products.Count)</span>
+                                            </label>
+                                        </div>
+                                     </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- single sidebar start -->
+                        <div class="sidebar-items">
+                            <div class="sidebar-item">
+                              <form id="FormFilter" asp-action="index"asp-controller="product" method="get">
+                                  <button type="submit">Filter</button>
+                              </form>
+                            </div>
+                        </div>
+                        <!-- single sidebar end -->
+
+                    </div>
+                </div>
+                <!-- sidebar area end -->
+                <!-- shop main wrapper start -->
+                <div class="col-lg-9 order-1 order-lg-2">
+                    <div class="shop-product-wrapper">
+                        <!-- product item list start -->
+                        <div class="shop-product-wrap grid-view row mbn-50">
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="col-lg-4 col-sm-6">
+                                    <!-- product grid item start -->
+                                    <div class="product-item mb-53">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Id">
+                                                <img src="~/assets/images/products/@item.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <h5 class="product-name">
+                                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Id">@item.Name</a>
+                                            </h5>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((item.SalePrice*(1-item.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@item.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@item.Id">Add to Cart</a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@item.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@item.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- product grid item end -->
+                                </div>
+
+                            }
+                        </div>
+                        <!-- product item list end -->
+                        <!-- start pagination area -->
+                        <div style="margin:10px 0" class="paginatoin-area text-center mt-45">
+                            <ul class="pagination-box">
+                                <li><a class="Previous" href="#"><i class="fas fa-arrow-alt-circle-left"></i></a></li>
+                                @for (int i = 1; i <= ViewBag.TotalPage; i++)
+                                {
+                                    <li class="@(ViewBag.Page==i?"active":"")"><a asp-action="index" asp-route-page="@i" asp-route-categoryid="@ViewBag.CategryId" asp-route-brandid="@ViewBag.BrandId" asp-route-colorid="@ViewBag.Color">@i</a></li>
+                                }
+
+                                <li><a class="Next" href="#"><i class="fas fa-arrow-alt-circle-right"></i></a></li>
+                            </ul>
+                        </div>
+                        <!-- end pagination area -->
+                    </div>
+                </div>
+                <!-- shop main wrapper end -->
+            </div>
+        </div>
+    </div>
+  
+    <!-- page main wrapper end -->
+</main>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+            /*-------------------------------------
+        	--> Range Slider
+        ---------------------------------------*/
+        $(function() {
+            $(".sb-range-slider").slider({
+                range: true,
+                min: Math.ceil(@Model.MinPrice),
+                max: Math.ceil(@Model.MaxPrice),
+                values: [@ViewBag.FilterbyMin, @ViewBag.FilterbyMax],
+                slide: function(event, ui) {
+                    $("#amount").val("£" + ui.values[0] + " - £" + ui.values[1]);
+                },
+                change: function (event, ui) {
+                    $("#minPriceInput").val(ui.values[0]);
+                    $("#maxPriceInput").val(ui.values[1]);
+
+                }
+            });
+            $("#amount").val("£" + $(".sb-range-slider").slider("values", 0) +
+                " - £" + $(".sb-range-slider").slider("values", 1));
+        });
+
+        })
+    </script>
+
+}

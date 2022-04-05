@@ -1,0 +1,284 @@
+﻿@using MyFinalProject.Services
+@using Microsoft.AspNetCore.Identity
+@inject LayoutService layoutservices
+@inject UserManager<AppUser> usermanager
+
+@{
+    var settings = layoutservices.GetSettings();
+    var basketVM = layoutservices.GetBasket();
+    AppUser member = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        member = usermanager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name && !x.IsAdmin);
+    }
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/assets/css/style.css">
+    <link rel="stylesheet" href="~/assets/css/plugin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header-logo">
+                        <img src="~/assets/images/@settings["headerlogo"]" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="header-search">
+                        <form action="">
+                            <input style="width:400px" type="text">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header-phone">
+                        <p>
+                            Customer Service
+                            <br>
+                            <b>@settings["headernum"]</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="container-fluid">
+                                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Shop</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Account</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Blog</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">About Us</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Contact Us</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Fag's</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#"><i class="fas fa-heart"></i></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="dropdown basket-dropdown">
+
+                                                <a href="" class="nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-shopping-basket"></i>
+                                                    <sup style="color:red">@basketVM.Products.Count</sup>
+                                                </a>
+                                                <div style="width: 300px;" class=" dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <div class="minicart-content-box">
+                                                        <div class="minicart-item-wrapper">
+                                                            <ul>
+                                                                @foreach (var item in basketVM.Products)
+                                                                {
+                                                                    <li class="minicart-item">
+                                                                        <div class="minicart-thumbb">
+                                                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Product.Id">
+                                                                                <img style="width: 84px;" src="~/assets/images/products/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="product">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="minicart-content">
+                                                                            <h3 class="product-name">
+                                                                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Product.Id">@item.Product.Name</a>
+                                                                            </h3>
+                                                                            <p>
+                                                                                <span class="cart-quantity">@item.Count <strong>&times;</strong></span>
+                                                                                <span class="cart-price">$@((item.Product.SalePrice*(1-item.Product.DiscountPercent/100)).ToString("0.00"))</span>
+                                                                            </p>
+                                                                        </div>
+                                                                        <a  asp-controller="product" asp-action="RemoveBasket" asp-route-id="@item.Product.Id" class="minicart-remove"><i class="fas fa-times"></i></a>
+                                                                    </li>
+                                                                }
+
+                                                            </ul>
+                                                        </div>
+
+                                                        <div class="minicart-pricing-box">
+                                                            <ul>
+                                                                <li class="total">
+                                                                    <span>total</span>
+                                                                    <span><strong>$@basketVM.TotalPrice</strong></span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <div style="width: 70%; margin: 27px;" class="minicart-button">
+                                                            <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
+                                                            <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="dropdown">
+                                                <a href="" class="nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-user"></i>
+                                                </a>
+                                                <div style="width: 280px;" class=" dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <div style="padding: 30px;" class="user">
+                                                        @if (member==null)
+                                                        {
+                                                            <div class="user-login">
+                                                                <div class="login">
+                                                                    <div> <a style="text-decoration: none;" asp-controller="account" asp-action="login">Login</a></div>
+                                                                    <div><a style="text-decoration: none;" asp-controller="account" asp-action="register">Create An Account</a></div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="user-profile">
+                                                                <div class="row">
+
+                                                                    <div class="col-lg-12">
+                                                                        <div class="user-name">
+                                                                            <h6>@User.Identity.Name</h6>
+                                                                        </div>
+                                                                    </div>
+                                                                    <a asp-controller="account" asp-action="logout">Logout</a>
+                                                                </div>
+                                                            </div>
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Quick view modal start -->
+    <div class="modal" id="quick_view">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        </div>
+    </div>
+    <!-- Quick view modal end -->
+    @RenderBody()
+    <footer class="footer-wrapper">
+        <!-- footer main area start -->
+        <div style="padding: 50px 0px;" class="footer-widget-area section-padding">
+            <div class="container">
+                <div class="row">
+                    <!-- footer widget item start -->
+                    <div class="col-xl-3 col-lg-3 col-md-6">
+                        <div class="widget-item mt-40">
+                            <h5 class="widget-title">My Account</h5>
+                            <ul class="widget-body">
+                                <li><i class="fas fa-address-book"></i> @settings["address"]</li>
+                                <li><i class="far fa-envelope"></i> Mail Us: <a href="mailto:yourmail@gmail.com">@settings["mail"]</a></li>
+                                <li><i class="fas fa-phone"></i> Phone: <a href="%2b0025425456554">@settings["number"]</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- footer widget item end -->
+                    <!-- footer widget item start -->
+                    <div class="col-xl-2 col-lg-3 col-md-6">
+                        <div class="widget-item mt-40">
+                            <h5 class="widget-title">Information</h5>
+                            <div class="widget-body">
+                                <ul class="useful-link">
+                                    <li><a href="#">Home</a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    <li><a href="#">Returns & Exchanges</a></li>
+                                    <li><a href="#">Shipping & Delivery</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- footer widget item end -->
+                    <!-- footer widget item start -->
+                    <div class="col-xl-2 col-lg-3 offset-xl-1 col-md-6">
+                        <div class="widget-item mt-40">
+                            <h5 class="widget-title">Quick Links</h5>
+                            <div class="widget-body">
+                                <ul class="useful-link">
+                                    <li><a href="#">Store Location</a></li>
+                                    <li><a href="#">My Account</a></li>
+                                    <li><a href="#">Orders Tracking</a></li>
+                                    <li><a href="#">Size Guide</a></li>
+                                    <li><a href="#">Shopping Rates</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- footer widget item end -->
+                    <!-- footer widget item start -->
+                    <div class="col-xl-4 col-lg-3 col-md-6">
+                        <div class="widget-item mt-40">
+                            <h5 class="widget-title">Newsletter</h5>
+                            <div class="widget-body">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor saepe voluptatibus asperiores?
+                                <form action="">
+                                    <input type="email">
+                                    <button type="submit">Subscribe</button>
+                                </form>
+                                Follow us on Social Networks
+                                <div class="footer-social-link">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- footer widget item end -->
+                </div>
+            </div>
+        </div>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script src="https://kit.fontawesome.com/2eff66d092.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script src="~/assets/js/plugin.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/plugins.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

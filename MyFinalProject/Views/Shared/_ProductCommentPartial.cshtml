@@ -1,0 +1,24 @@
+﻿@model ProductComment
+<form asp-action="comment" method="post" class="review-form">
+    <input type="hidden" name="productId" value="@Model.ProductId" />
+
+    <div class="form-group row">
+        <div class="col">
+            <label asp-for="Text" class="col-form-label"><span class="text-danger">*</span> Your Review</label>
+            <textarea asp-for="Text" class="form-control"></textarea>
+            <span asp-validation-for="Text"></span>
+        </div>
+    </div>
+    <div style="padding: 10px;" class="form-group row">
+        <select asp-for="Rate" style="width: 150px;">
+            <option value="1">1 Star rating</option>
+            <option value="2">2 Star rating</option>
+            <option value="3">3 Star rating</option>
+            <option value="4">4 Star rating</option>
+            <option value="5">5 Star rating</option>
+        </select>
+    </div>
+    <div class="buttons">
+        <button class="sqr-btn" type="submit">Continue</button>
+    </div>
+</form> <!-- end of review-form -->

@@ -1,0 +1,77 @@
+﻿@model CartViewModel
+
+
+<section style="margin:30px 0">
+    <div class="container">
+        <div class="section-bg-color">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Cart Table Area -->
+                    <div style="overflow: hidden;" class="cart-table table-responsive cart-table">
+
+                        @if (Model.Basketitems.Products.Count != 0)
+                        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="pro-thumbnail">Photo</th>
+                        <th class="pro-title">Product</th>
+                        <th class="pro-count">Count</th>
+                        <th class="pro-subtotal">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Basketitems.Products)
+                    {
+    <tr>
+        <td class="pro-thumbnail"><a href="#"><img style="width:60px" class="img-fluid" src="~/upload/product/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="Product" /></a></td>
+        <td class="pro-title"><a href="#">@item.Product.Name</a></td>
+        <td class="pro-count">@item.Count</td>
+        <td class="pro-price"><span>$@((item.Product.SalePrice*(1-item.Product.DiscountPercent/100)).ToString("0.00"))</span></td>
+    </tr>
+}
+                </tbody>
+            </table> 
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Cart Calculation Area -->
+                    <div class="cart-calculator-wrapper">
+                        <div class="cart-calculate-items">
+                            <h3>Cart Totals</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr class="total">
+                                        <td>Total</td>
+                                    </tr>
+                                    <td class="total-amount">$@Model.Basketitems.TotalPrice.ToString("0.00")</td>
+
+                                </table>
+                            </div>
+                        </div>
+                        <a style="background-color:yellow" href="checkout.html" class="btn d-block">Proceed Checkout</a>
+                    </div>
+                </div>
+            </div>
+            }
+                        else
+                        {
+            <div style=" text-align: center; font-size: 35px;" class="empty-wishlist">
+                <p style="color:red">Cart is Empty</p>
+                <a asp-controller="home" asp-action="index">Return to Home Page</a>
+
+            </div>
+            
+            }
+
+
+
+
+                    </div>
+                    <!-- Cart Update Option -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

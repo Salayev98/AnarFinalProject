@@ -1,0 +1,137 @@
+﻿@model MemberProfileViewModel
+@{ 
+    int orderCounter = 0;
+    int orderItemCounter = 0;
+      }
+<main style="padding: 50px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <div style="border: 1px solid black;" class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-dashboard-tab" data-toggle="pill" href="#v-pills-dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">DashBoard</a>
+                    <a class="nav-link" id="v-pills-edit-profile-tab" data-toggle="pill" href="#v-pills-edit-profile" role="tab" aria-controls="v-pills-edit-profile" aria-selected="false">Edit Profile</a>
+                    <a class="nav-link" id="v-pills-order-h-tab" data-toggle="pill" href="#v-pills-order-h" role="tab" aria-controls="v-pills-order-h" aria-selected="false">Order History</a>
+                    <a class="nav-link" id="v-pills-password-tab" data-toggle="pill" href="#v-pills-password" role="tab" aria-controls="v-pills-password" aria-selected="false">Password</a>
+                    <a class="nav-link" href="">Logout</a>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-dashboard" role="tabpanel" aria-labelledby="v-pills-dashboard-tab">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div style="padding: 53px; text-align: center; border: 1px solid black;" class="user-profile">
+                                    <div style="padding: 20px 0;" class="user-info">
+                                        <div class="user-fullname">
+                                            <h5>@Model.Member.FullName</h5>
+                                        </div>
+                                        <div class="user-email">
+                                            <p>@Model.Member.Email</p>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div style="padding:40px;border:1px solid black" class="user-adress">
+                                    <div class="user-name">
+                                        <h4>@Model.Member.FullName</h4>
+                                    </div>
+                                    <div class="address">
+                                        <p>
+                                            County - @Model.Member.Country<br>
+                                            City - @Model.Member.City<br>
+                                            Street - @Model.Member.Address
+                                        </p>
+                                    </div>
+                                    <div class="phone">
+                                        <h6>Phone Number</h6>
+                                        <p>@Model.Member.Phone</p>
+                                    </div>
+                                    <div class="email">
+                                        <h6>Email Address</h6>
+                                        <p>@Model.Member.Email</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-edit-profile" role="tabpanel" aria-labelledby="v-pills-edit-profile-tab">
+                        @Html.Partial("_ProfileEditPartial", @Model.Member)
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-order-h" role="tabpanel" aria-labelledby="v-pills-order-h-tab">
+                        <div style="padding:30px;border:1px solid black" class="order-history">
+                            <div class="title">
+                                <h1>Order History</h1>
+                            </div>
+                            <div class="orders-view">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Order</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        @foreach (var order in Model.Orders)
+                                        {
+                                            orderCounter = 0;
+                                            orderCounter++;
+
+                                            <tr data-toggle="collapse" data-target="#demo-@order.Id" class="accordion-toggle">
+                                                <th scope="row">@orderCounter</th>
+                                                <td>@order.CreatedAt.ToString("dd-MM-yyyy") </td>
+                                                <td>@order.Status</td>
+                                                <td>$@order.TotalPrice for @order.OrderItems.Count item(s)</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="12" class="hiddenRow">
+                                                    <div class="accordian-body collapse" id="demo-@order.Id">
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr class="info">
+                                                                    <th></th>
+                                                                    <th>Product Name</th>
+                                                                    <th>Count</th>
+                                                                    <th>Unit price</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                                @foreach (var orderItem in order.OrderItems)
+                                                                {
+                                                                    orderItemCounter++;
+                                                                    <tr data-toggle="collapse" class="accordion-toggle" data-target="#demo10">
+                                                                        <td>@orderItemCounter</td>
+                                                                        <td>@orderItem.Product.Name</td>
+                                                                        <td>@orderItem.Count </td>
+                                                                        <td>@orderItem.DiscountedPrice</td>
+                                                                    </tr>
+}
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-password" role="tabpanel" aria-labelledby="v-pills-password-tab">
+                        @Html.Partial("_PasswordPartial",@Model.Member)
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

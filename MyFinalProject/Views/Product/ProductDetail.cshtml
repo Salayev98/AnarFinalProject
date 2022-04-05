@@ -1,0 +1,228 @@
+﻿@model ProductDetailViewModel
+    <main>
+        <!-- breadcrumb area start -->
+        <div style="padding: 20px;" class="breadcrumb-area bg-img">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrap text-center">
+                            <nav aria-label="breadcrumb">
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="shop.html">Shop</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Product Details</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb area end -->
+        <!-- product details wrapper start -->
+        <div class="product-details-wrapper section-padding">
+            <div class="container custom-container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- product details inner end -->
+                        <div class="product-details-inner">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="product-large-slider mb-20">
+                                        <div class="pro-large-img img-zoom">
+                                            <img style="width: 100%;" src="~/assets/images/products/@Model.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="product thumb" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="product-details-des">
+                                        <h3 class="pro-det-title">@Model.Product.Name</h3>
+                                        <div class="pro-review">
+                                            <span>
+                                                <a style="font-size: 15px;" href="#">
+                                                    <div class="product-review">
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                        @Model.Product.Comments.Count Reviews
+
+                                                    </div>
+                                                </a>
+                                            </span>
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                        <div class="product-info mb-20">
+                                            Availability:<span> "In Stock"</span>
+                                            Brand:<span> "@Model.Product.Brand.Name"</span>
+                                        </div>
+
+                                        <div class="price-box">
+                                            <span style="font-size: 20px;" class="regular-price"><b>$@Model.Product.SalePrice</b></span>
+                                            <span style="font-size: 20px;" class="old-price"><del><b>$80.00</b></del></span>
+                                        </div>
+
+                                        <div class="color">
+                                        <h5>Color:</h5>
+                                        <select form="FormFilter" class="form-select" aria-label="Default select example">
+                                            @foreach (var color in Model.Product.ProductColors)
+                                            {
+                                                <option value="@color.Color.Id">@color.Color.Name</option>
+
+                                            }
+                                        </select>
+
+                                        </div>
+
+                                        <div class="quantity-cart-box d-flex align-items-center mb-20">
+                                            <div class="quantity">
+                                                <div class="pro-qty"><input type="text" value="1"></div>
+                                            </div>
+                                            <form id="FormFilter" asp-action="addtobasket" asp-controller="product" asp-route-id="@Model.Product.Id" method="get">
+                                                <button type="submit">Add to Basket</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="share-icon">
+                                            <h5 class="cat-title">Share:</h5>
+                                            <a href="#"><i class="fa fa-facebook"></i></a>
+                                            <a href="#"><i class="fa fa-twitter"></i></a>
+                                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                                            <a href="#"><i class="fa fa-google-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product details inner end -->
+                        <!-- product details reviews start -->
+                        <div class="product-details-reviews section-padding">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="product-review-info">
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Information</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Rewiev</button>
+                                                </li>
+
+                                            </ul>
+                                            <div class="tab-content" id="myTabContent">
+                                                <div style="padding: 20px; border: 1px solid;" class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                    <h3>Specification</h3>
+                                                    <li style=" text-decoration: none">
+                                                        <h5>General:</h5>
+                                                        <ol>Material: @Model.Product.Material</ol>
+                                                        <ol>Engine Type: @Model.Product.EngineType</ol>
+                                                        <ol>Number of Speeds: @Model.Product.NumberofSpeeds</ol>
+                                                        <ol>Charge Time: @Model.Product.ChargeTime</ol>
+                                                        <ol>Battery Voltage: @Model.Product.BatteryVoltage V</ol>
+                                                        <ol>Weight: @Model.Product.Weight kg</ol>
+                                                    </li>
+                                                    <li>
+                                                        <h5>Dimensions:</h5>
+                                                        <ol>Length:  @Model.Product.Length mm</ol>
+                                                        <ol>Width:  @Model.Product.Width mm</ol>
+                                                        <ol>Height:  @Model.Product.Height mm</ol>
+                                                    </li>
+                                                </div>
+                                                <div style="padding: 20px; border: 1px solid;" class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                                    
+
+                                                        <div class="total-reviews">
+                                                            @foreach (var user in Model.Product.Comments)
+                                                            {
+                                                                <div class="user-rewiew">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12">
+                                                                            <h5><span>@user.AppUser.UserName -</span><span>@user.CreatedAt.ToString("dd-MM-yyyy")</span></h5>
+                                                                            <div class="pro-review">
+                                                                                <div class="product-review">
+                                                                                    @for (int i = 1; i <= 5; i++)
+                                                                                    {
+                                                                                        if (i <= user.Rate)
+                                                                                        {
+                                                                                            <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                                                        }
+                                                                                    }
+                                                                                </div>
+                                                                                <p>@user.Text</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        @Html.Partial("_ProductCommentPartial",@Model.Comment)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product details reviews end -->
+                        <!-- featured product area start -->
+                        <section style="padding: 20px 0px;" id="featured">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h4>Related Products</h4>
+                                    </div>
+                                </div>
+                                <div style="display: flex;" class="featured-products">
+                                    @foreach (var relproducts in Model.RelatedProdcts)
+                                    {
+                                        <div class="product-item mb-50">
+                                            <div class="product-thumb">
+                                                <a href="product-details.html">
+                                                    <img src="~/assets/images/products/@relproducts.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="product-content">
+                                                <div class="product-name">
+                                                    <a style="text-decoration: none; color: black;" href="product-details.html">@relproducts.Name</a>
+                                                </div>
+                                                <div class="product-review">
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    12 Reviews
+                                                </div>
+                                                <div class="price-box">
+                                                    <span class="price-regular">$@relproducts.SalePrice</span>
+                                                </div>
+                                                <div class="product-action-link">
+                                                    <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@relproducts.Id">Add to Cart</a>
+                                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                    <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@relproducts.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                        </section>
+                        <!-- featured product area end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- product details wrapper end -->
+    </main>
+    

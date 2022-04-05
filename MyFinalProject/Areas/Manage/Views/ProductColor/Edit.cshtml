@@ -1,0 +1,33 @@
+﻿
+@model ProductColor
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1>Edit</h1>
+
+            <form asp-action="edit" method="post" enctype="multipart/form-data">
+                <div class="form-group col-lg-12">
+                    <input  readonly  value="@Model.Product.Name" />
+                </div>
+                <div class="form-group col-lg-4">
+                    <label asp-for="ColorId">Colors</label>
+                    <select class="form-control" asp-for="ColorId" asp-items="@new SelectList(ViewBag.Color,nameof(Color.Id),nameof(Color.Name))">
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Edit</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", ".delete-img-box", function () {
+                $(this).parent().remove()
+            })
+        })
+    </script>
+}
+

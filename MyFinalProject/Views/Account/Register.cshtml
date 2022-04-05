@@ -1,0 +1,76 @@
+﻿@model MemberRegisterViewModel
+
+
+<main style="padding: 50px;">
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area bg-img" data-bg="~/assets/img/banner/breadcrumb-banner.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap text-center">
+                        <nav aria-label="breadcrumb">
+
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Login-Register</li>
+                            </ul>
+
+                        </nav>
+                    </div>
+                    <h1 class="title">Register</h1>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb area end -->
+    <!-- login register wrapper start -->
+    <div class="login-register-wrapper section-padding">
+        <div class="container">
+            <div class="member-area-from-wrap">
+                <div class="row">
+                    <!-- Register Content Start -->
+                    <div class="col-lg-6">
+                        <div class="login-reg-form-wrap signup-form">
+                            <h2>Register</h2>
+                            <form asp-action="register" method="post">
+                                <div class="single-input-item">
+                                    <input asp-for="Username" placeholder="User Name" />
+                                    <span asp-validation-for="Username"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <input asp-for="FullName" placeholder="Full Name" />
+                                    <span asp-validation-for="FullName"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <input asp-for="Email" placeholder="Enter your Email" />
+                                    <span asp-validation-for="Email"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="single-input-item">
+                                            <input asp-for="Password" placeholder="Enter your Password" />
+                                            <span asp-validation-for="Password"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="single-input-item">
+                                            <input asp-for="ConfirmPassword" placeholder="Repeat your Password" />
+                                            <span asp-validation-for="ConfirmPassword"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                <div class="single-input-item">
+                                    <button type="submit" class="btn">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Register Content End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login register wrapper end -->
+</main>

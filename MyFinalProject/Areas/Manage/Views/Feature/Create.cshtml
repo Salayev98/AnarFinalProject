@@ -1,0 +1,33 @@
+﻿@model Feature
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1>Create</h1>
+
+            <form asp-action="create" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Title">Title</label>
+                    <input type="text" class="form-control" asp-for="Title" placeholder="Enter Title">
+                    <span asp-validation-for="Title"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Desc">Desc</label>
+                    <input type="text" class="form-control" asp-for="Desc" placeholder="Enter Desc">
+                    <span asp-validation-for="Desc"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Icon">Icon</label>
+                    <input type="text" class="form-control" asp-for="Icon" placeholder="Enter Icon">
+                    <span asp-validation-for="Icon"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2">Create</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+

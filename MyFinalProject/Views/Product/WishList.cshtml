@@ -1,0 +1,58 @@
+﻿@model WishListViewModel
+
+
+<section style="margin:30px 0">
+    <div class="container">
+         <div class="section-bg-color">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Cart Table Area -->
+                <div class="cart-table table-responsive wish-table">
+
+                    @if (Model.Products.Count != 0)
+                    {
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="pro-thumbnail">Photo</th>
+                                <th class="pro-title">Product</th>
+                                <th class="pro-subtotal">Price</th>
+                                <th class="pro-remove">Remove</th>
+                                <th class="pro-basket">AddToBasket</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.Products)
+                            {
+                    <tr>
+                        <td class="pro-thumbnail"><a href="#"><img style="width:60px" class="img-fluid" src="~/upload/product/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="Product" /></a></td>
+                        <td class="pro-title"><a href="#">@item.Product.Name</a></td>
+                        <td class="pro-price"><span>$@((item.Product.SalePrice*(1-item.Product.DiscountPercent/100)).ToString("0.00"))</span></td>
+
+                        <td class="pro-remove"><a a class="remove-wish" asp-controller="product" asp-action="removewish" asp-route-id="@item.Product.Id"><i class="fa fa-trash-o"></i></a></td>
+                        <td class="pro-basket"><a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@item.Product.Id"><i class="fas fa-shopping-basket"></i></a></td>
+                    </tr>}
+                        </tbody>
+                    </table>
+                    }
+                    else
+                    {
+                    <div style=" text-align: center; font-size: 35px;" class="empty-wishlist">
+                        <p style="color:red">Wish List is Empty</p>
+                        <a asp-controller="home" asp-action="index">Return to Home Page</a>
+
+                    </div>
+                    }
+
+
+              
+
+                            </div>
+                <!-- Cart Update Option -->
+
+            </div>
+        </div>
+    </div>
+</div>
+</section>

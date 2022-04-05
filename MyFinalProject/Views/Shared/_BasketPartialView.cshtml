@@ -1,0 +1,53 @@
+﻿@model BasketViewModel
+    
+
+
+    <a href="" class="nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-shopping-basket"></i>
+        <sup style="color:red">@Model.Products.Count</sup>
+    </a>
+    <div style="width: 300px;" class=" dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="minicart-content-box">
+            <div class="minicart-item-wrapper">
+                <ul>
+                    @foreach (var item in Model.Products)
+                    {
+                        <li class="minicart-item">
+                            <div class="minicart-thumbb">
+                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Product.Id">
+                                    <img style="width: 84px;" src="~/assets/images/products/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="product">
+                                </a>
+                            </div>
+                            <div class="minicart-content">
+                                <h3 class="product-name">
+                                    <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Product.Id">@item.Product.Name</a>
+                                </h3>
+                                <p>
+                                    <span class="cart-quantity">@item.Count <strong>&times;</strong></span>
+                                   
+                                    <span class="cart-price">$@((item.Product.SalePrice*(1-item.Product.DiscountPercent/100)).ToString("0.00"))</span>
+                                    
+                                </p>
+                            </div>
+                            <a asp-controller="product" asp-action="RemoveBasket" asp-route-id="@item.Product.Id" class="minicart-remove"><i class="fas fa-times"></i></a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+
+            <div class="minicart-pricing-box">
+                <ul>
+                    <li class="total">
+                        <span>total</span>
+                        <span><strong>$@Model.TotalPrice</strong></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="width: 70%; margin: 27px;" class="minicart-button">
+                <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
+                <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
+            </div>
+        </div>
+    </div>

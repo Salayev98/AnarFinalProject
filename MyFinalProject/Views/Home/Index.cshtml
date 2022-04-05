@@ -1,0 +1,736 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+    int count = 0;
+}
+<main>
+    <section id="slider">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            @foreach (var slider in Model.Sliders)
+                            {
+                                <div class="carousel-item @(count==0?"active":"") ">
+                                    <img src="~/assets/images/sliders/@slider.Image" class="d-block w-100" alt="...">
+                                    <div class="slider-content">
+                                        <h1>@slider.Title1 <br> @slider.Title2</h1>
+                                        <p>@slider.Desc1</p>
+                                        <p>@slider.Desc2</p>
+                                        <div class="content-button">
+                                            <a href="@slider.BtnUrl">@slider.BtnText</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                count++;
+
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="features">
+        <div class="container">
+            <div class="row">
+                @foreach (var feature in Model.Features)
+                {
+                    <div  class="col-lg-3">
+                        <div style="border:1px solid black" class="features">
+                            <div style="color:yellow" class="logo">
+                                @Html.Raw(@feature.Icon)
+                            </div>
+                            <div class="content">
+                                <h4>@feature.Title</h4>
+                                <p>@feature.Desc</p>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </section>
+    <section id="featured">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4>Featured Products</h4>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="product-tab-menu">
+                        <ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all"
+                                   role="tab" aria-controls="pills-all" aria-selected="true">All</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-power-tab" data-toggle="pill" href="#pills-power"
+                                   role="tab" aria-controls="pills-power" aria-selected="false">Power Tools</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-hand-tab" data-toggle="pill" href="#pills-hand"
+                                   role="tab" aria-controls="pills-hand" aria-selected="false">Hand Tools</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-plumbing-tab" data-toggle="pill" href="#pills-plumbing"
+                                   role="tab" aria-controls="pills-plumbing" aria-selected="false">Plumbing</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tab-content" id="pills-tabContent">
+                        <!-- first tab-pane -->
+                        <div class="tab-pane fade show active" id="pills-all" role="tabpanel"
+                             aria-labelledby="pills-all-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var product in Model.Products)
+	{
+                                <div class="product-item mb-50">
+                                    <div class="product-thumb">
+                                        <a asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">
+                                            <img src="~/assets/images/products/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="product-name">
+                                            <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">@product.Name</a>
+                                        </div>
+                                        <div class="product-review">
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            12 Reviews
+                                        </div>
+                                        <div class="price-box">
+                                            <span class="price-regular">$@((product.SalePrice*(1-product.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@product.SalePrice</del></span>
+                                        </div>
+                                        <div class="product-action-link">
+                                            <a class="button add-to-basket"asp-controller="product" asp-action="addtobasket" asp-route-id="@product.Id">Add to Cart</a>
+                                            <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                            <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#quick_view" ><span><i class="fas fa-eye"></i></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+	}
+                               
+                            </div>
+                        </div>
+                        <!-- second tab-pane -->
+                        <div class="tab-pane fade" id="pills-power" role="tabpanel" aria-labelledby="pills-power-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools"))
+                                {
+                                    <div class="product-item mb-50">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">
+                                                <img src="~/assets/images/products/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="product-name">
+                                                <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">@powerproduct.Name</a>
+                                            </div>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((powerproduct.SalePrice*(1-powerproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@powerproduct.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@powerproduct.Id">Add to Cart</a>
+                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@powerproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <!-- third tab-pane -->
+                        <div class="tab-pane fade" id="pills-hand" role="tabpanel" aria-labelledby="pills-hand-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools"))
+	{
+                                <div class="product-item mb-50">
+                                    <div class="product-thumb">
+                                        <a asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">
+                                            <img src="~/assets/images/products/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="product-content">
+                                        <div class="product-name">
+                                            <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">@handproduct.Name</a>
+                                        </div>
+                                        <div class="product-review">
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            12 Reviews
+                                        </div>
+                                        <div class="price-box">
+                                            <span class="price-regular">$@((handproduct.SalePrice*(1-handproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@handproduct.SalePrice</del></span>
+                                        </div>
+                                        <div class="product-action-link">
+                                            <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@handproduct.Id">Add to Cart</a>
+                                            <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                            <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@handproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+	}
+                                
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-plumbing" role="tabpanel" aria-labelledby="pills-plumbing-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing"))
+                                {
+                                    <div class="product-item mb-50">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">
+                                                <img src="~/assets/images/products/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="product-name">
+                                                <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">@plumbproduct.Name</a>
+                                            </div>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((plumbproduct.SalePrice*(1-plumbproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@plumbproduct.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@plumbproduct.Id">Add to Cart</a>
+                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@plumbproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="banner">
+        <div class="container">
+            <div class="row">
+                <div class="banner-image">
+                    <img src="~/assets/images/banners/banner-1.jpg" alt="">
+                    <div class="banner-content">
+                        <div class="content-title">
+                            <h3>Hundrend Hand Tools</h3>
+                        </div>
+                        <div class="content">
+                            <p>Hammers,Chisels,Universal Pliers,Nippers,Jigsaws,Saws</p>
+                        </div>
+                        <a class="button">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="best-seller">
+        <div class="container">
+            <h3>BestSeller</h3>
+            <div class="row">
+                <div class="col-lg-5">
+                    @foreach (var bestpro in @Model.Products.Where(x => x.IsBestseller).Take(1))
+                    {
+                        <div class="product-banner mb-50">
+                            <div class="product-thumb">
+                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@bestpro.Id">
+                                    <img src="~/assets/images/products/@bestpro.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                </a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-name">
+                                    <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@bestpro.Id">@bestpro.Name</a>
+                                </div>
+                                <div class="product-review">
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    12 Reviews
+                                </div>
+                                <div class="price-box">
+                                    <span class="price-regular">$@((bestpro.SalePrice*(1-bestpro.DiscountPercent/100)).ToString("0.00"))</span>
+                                    <span class="price-old"><del>$@bestpro.SalePrice</del></span>
+                                </div>
+                                <div class="product-action-link">
+                                    <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@bestpro.Id">Add to Cart</a>
+                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                    <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@bestpro.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+                <div class="col-lg-7">
+                    @foreach (var best in Model.Products.Where(x=>x.IsBestseller).Take(6))
+                    {
+                        <div class="product-item mb-50">
+                            <div class="product-thumb">
+                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@best.Id">
+                                    <img src="~/assets/images/products/@best.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                </a>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-name">
+                                    <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@best.Id">@best.Name</a>
+                                </div>
+                                <div class="product-review">
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    <span><i class="fas fa-star"></i></span>
+                                    12 Reviews
+                                </div>
+                                <div class="price-box">
+                                    <span class="price-regular">$@((best.SalePrice*(1-best.DiscountPercent/100)).ToString("0.00"))</span>
+                                    <span class="price-old"><del>$@best.SalePrice</del></span>
+                                </div>
+                                <div class="product-action-link">
+                                    <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@best.Id">Add to Cart</a>
+                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                    <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@best.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="popular-categories">
+        <div class="container">
+            <h3>Popular Categories</h3>
+            <div class="row">
+                @foreach (var category in Model.Categories.Where(x=>x.isPopular))
+                {
+                    <div class="col-lg-4">
+                        <div class="category-card">
+                            <div class="card-image">
+                                <img style="width:143px;height:143px" src="~/assets/images/categories/@category.Image" alt="">
+                            </div>
+                            <div class="card-content">
+                                <div class="category-name">
+                                    <h3>@category.Name</h3>
+                                </div>
+                                <div class="category-content">
+
+                                    @foreach (var subcategory in category.Subcategories)
+                                    {
+                                    <p>
+                                        @subcategory.Name
+                                    </p>
+                                            }
+                                        
+                                    </div>
+                                <div class="card-button">
+                                    <a class="button" href="">Show All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </section>
+    <section id="new-arrival">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4>New Arrivals</h4>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="product-tab-menu">
+                        <ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-alll"
+                                   role="tab" aria-controls="pills-all" aria-selected="true">All</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-power-tab" data-toggle="pill" href="#pills-powerr"
+                                   role="tab" aria-controls="pills-power" aria-selected="false">Power Tools</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-hand-tab" data-toggle="pill" href="#pills-handd"
+                                   role="tab" aria-controls="pills-hand" aria-selected="false">Hand Tools</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-plumbing-tab" data-toggle="pill" href="#pills-plumbingg"
+                                   role="tab" aria-controls="pills-plumbing" aria-selected="false">Plumbing</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="tab-content" id="pills-tabContent">
+                        <!-- first tab-pane -->
+                        <div class="tab-pane fade show active" id="pills-alll" role="tabpanel"
+                             aria-labelledby="pills-all-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var product in Model.Products.Where(x=>x.IsNew))
+                                {
+                                    <div class="product-item mb-50">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">
+                                                <img src="~/assets/images/products/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="product-name">
+                                                <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">@product.Name</a>
+                                            </div>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((product.SalePrice*(1-product.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@product.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@product.Id">Add to Cart</a>
+                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <!-- second tab-pane -->
+                        <div class="tab-pane fade" id="pills-powerr" role="tabpanel" aria-labelledby="pills-power-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools"))
+                                {
+                                    <div class="product-item mb-50">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">
+                                                <img src="~/assets/images/products/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="product-name">
+                                                <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">@powerproduct.Name</a>
+                                            </div>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((powerproduct.SalePrice*(1-powerproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@powerproduct.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@powerproduct.Id">Add to Cart</a>
+                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@powerproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <!-- third tab-pane -->
+                        <div class="tab-pane fade" id="pills-handd" role="tabpanel" aria-labelledby="pills-hand-tab">
+                            <div class="featured-products slick">
+
+                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools" && x.IsNew))
+                                {
+                                    <div class="product-item mb-50">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">
+                                                <img src="~/assets/images/products/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-content">
+                                            <div class="product-name">
+                                                <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">@handproduct.Name</a>
+                                            </div>
+                                            <div class="product-review">
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                <span><i class="fas fa-star"></i></span>
+                                                12 Reviews
+                                            </div>
+                                            <div class="price-box">
+                                                <span class="price-regular">$@((handproduct.SalePrice*(1-handproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@handproduct.SalePrice</del></span>
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@handproduct.Id">Add to Cart</a>
+                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@handproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-plumbingg" role="tabpanel" aria-labelledby="pills-plumbing-tab">
+                            <div class="featured-products slick">
+                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing" &&x.IsNew))
+                        
+                                    {
+                                        <div class="product-item mb-50">
+                                            <div class="product-thumb">
+                                                <a asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">
+                                                    <img src="~/assets/images/products/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="product-content">
+                                                <div class="product-name">
+                                                    <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">@plumbproduct.Name</a>
+                                                </div>
+                                                <div class="product-review">
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    <span><i class="fas fa-star"></i></span>
+                                                    12 Reviews
+                                                </div>
+                                                <div class="price-box">
+                                                    <span class="price-regular">$@((plumbproduct.SalePrice*(1-plumbproduct.DiscountPercent/100)).ToString("0.00"))</span>
+                                                    <span class="price-old"><del>$@plumbproduct.SalePrice</del></span>
+                                                </div>
+                                                <div class="product-action-link">
+                                                    <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@plumbproduct.Id">Add to Cart</a>
+                                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                    <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@plumbproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="blog">
+        <div class="container">
+            <h3>Latest News</h3>
+            <div class="row">
+                <div style="display: flex;" class="news slick">
+                    @foreach (var blog in Model.Blogs)
+                    {
+                        <div class="blog-item mb-50">
+                            <div class="blog-thumb">
+                                <a href="@blog.RedirectUrll">
+                                    <img src="~/assets/images/blogs/@blog.Image" style="width:100%" alt="">
+                                </a>
+                            </div>
+                            <div class="blog-content">
+                                <div class="post-title">
+                                    <a style="text-decoration: none; color: black;" href="product-details.html">@blog.Title</a>
+                                </div>
+
+                                <div class="post-data">
+                                    <span>@blog.Date.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <div class="post-content">
+                                    <p>@blog.Desc</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section style="padding: 20px" id="product-columns">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h3>Top Rated Products</h3>
+                    @foreach (var top in Model.Products.Where(x => x.IsNew).Take(3))
+                    {
+                        <div style="height:145px;" class="card-product">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="card-image">
+                                        <img style="width: 100%;" src="~/assets/images/products/@top.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="card-content">
+                                        <div class="product-name">
+                                            <h5>@top.Name</h5>
+                                        </div>
+                                        <div class="product-rate">
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            12 Reviews
+                                        </div>
+                                        <div class="product-price">
+                                            <span class="price-regular">$@((top.SalePrice*(1-top.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@top.SalePrice</del></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <div class="col-lg-4">
+                    <h3>Special Offers</h3>
+                    @foreach (var special in Model.Products.Where(x => x.IsSpecial).Take(3))
+                    {
+                        <div style="height:145px;" class="card-product">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="card-image">
+                                        <img style="width: 100%;" src="~/assets/images/products/@special.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="card-content">
+                                        <div class="product-name">
+                                            <h5>@special.Name</h5>
+                                        </div>
+                                        <div class="product-rate">
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            12 Reviews
+                                        </div>
+                                        <div class="product-price">
+                                            <span class="price-regular">$@((special.SalePrice*(1-special.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@special.SalePrice</del></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+                <div class="col-lg-4">
+                    <h3>BestSeller</h3>
+                    @foreach (var bestseller in Model.Products.Where(x => x.IsBestseller).Take(3))
+                    {
+                        <div style="height:145px;" class="card-product">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="card-image">
+                                        <img style="width: 100%;" src="~/assets/images/products/@bestseller.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="card-content">
+                                        <div class="product-name">
+                                            <h5>@bestseller.Name</h5>
+                                        </div>
+                                        <div class="product-rate">
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            <span><i class="fas fa-star"></i></span>
+                                            12 Reviews
+                                        </div>
+                                        <div class="product-price">
+                                            <span class="price-regular">$@((bestseller.SalePrice*(1-bestseller.DiscountPercent/100)).ToString("0.00"))</span>
+                                            <span class="price-old"><del>$@bestseller.SalePrice</del></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
