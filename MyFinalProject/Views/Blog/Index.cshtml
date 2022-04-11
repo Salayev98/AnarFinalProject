@@ -1,0 +1,80 @@
+﻿@model PaginatedList<Blog>
+    <main>
+
+        <section class="section lb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                        <div class="page-wrapper">
+                            <div class="blog-custom-build">
+                                @foreach (var blog in Model)
+                                {
+                                    <div class="blog-box wow fadeIn">
+                                        <div class="post-media">
+                                            <a href="marketing-single.html" title="">
+                                                <img src="~/assets/images/blogs/@blog.Image" alt="" class="img-fluid">
+                                                <div class="hovereffect">
+                                                    <span></span>
+                                                </div>
+                                                <!-- end hover -->
+                                            </a>
+                                        </div>
+                                        <!-- end media -->
+                                        <div class="blog-meta big-meta text-center">
+                                            <div class="post-sharing">
+
+                                            </div><!-- end post-sharing -->
+                                            <h4><a href="marketing-single.html" title="">@blog.Title</a></h4>
+                                            <p>@blog.Desc</p>
+                                            <small><a href="marketing-single.html" title="">@blog.Date.ToString("dd-MM-yyy")</a></small>
+                                        </div><!-- end meta -->
+                                    </div><!-- end blog-box -->
+
+                                    <hr class="invis">
+                                }
+                            </div><!-- end blog-box -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                        <div class="widget">
+                            <h2 class="widget-title">Recent Posts</h2>
+                            <div class="blog-list-widget">
+                                <div class="list-group">
+                                    @foreach (var recent in Model.Take(4))
+                                    {
+                                        <a href="marketing-single.html" class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="w-100 justify-content-between">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <img src="~/assets/images/blogs/@recent.Image" alt="" class="img-fluid float-left">
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <h5 style="color: black !important;" class="mb-1">@recent.Title</h5>
+                                                        <small>@recent.Date.ToString("dd-MM-yyy")</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
+                                </div>
+                            </div><!-- end blog-list -->
+                        </div><!-- end widget -->
+                    </div><!-- end sidebar -->
+                    <div style="margin:10px 0" class="paginatoin-area text-center mt-45">
+                        <ul class="pagination-box">
+                            <li><a class="Previous" href="#"><i class="fas fa-arrow-alt-circle-left"></i></a></li>
+                            @for (int i = 1; i <= ViewBag.TotalPage; i++)
+                            {
+                                <li class="@(ViewBag.Page==i?"active":"")"><a asp-action="index" asp-route-page="@i">@i</a></li>
+                            }
+
+                            <li><a class="Next" href="#"><i class="fas fa-arrow-alt-circle-right"></i></a></li>
+                        </ul>
+
+                    </div>
+
+                </div><!-- end col -->
+            </div><!-- end col -->
+        </section>
+    </main>

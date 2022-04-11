@@ -27,6 +27,7 @@ namespace MyFinalProject.Models
         public int Width { get; set; }
         public int Length { get; set; }
         public bool IsBestseller { get; set; }
+        public bool isAvailable { get; set; }
         public bool IsSpecial { get; set; }
         public bool IsNew { get; set; }
         public bool IsDeleted { get; set; }
@@ -34,6 +35,8 @@ namespace MyFinalProject.Models
         public int BrandId { get; set; }
         public Category Category { get; set; }
         public Brand Brand { get; set; }
+        [Range(1, 5)]
+        public int Rate { get; set; }
         public List<ProductColor> ProductColors { get; set; }
         public List<ProductImage> ProductImages { get; set; }
         [NotMapped]

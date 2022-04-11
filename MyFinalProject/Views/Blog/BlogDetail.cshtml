@@ -1,0 +1,36 @@
+﻿@model Blog
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="page-wrapper">
+                <div class="blog-custom-build">
+                    
+                        <div class="blog-box wow fadeIn">
+                            <div class="post-media">
+                                <a href="marketing-single.html" title="">
+                                    <img style="width:100%" src="~/assets/images/blogs/@Model.Image" alt="" class="img-fluid">
+                                    <div class="hovereffect">
+                                        <span></span>
+                                    </div>
+                                    <!-- end hover -->
+                                </a>
+                            </div>
+                            <!-- end media -->
+                            <div class="blog-meta big-meta text-center">
+                                <div class="post-sharing">
+
+                                </div><!-- end post-sharing -->
+                                <h4><a href="@Model.RedirectUrll" title="">@Model.Title</a></h4>
+                                <p>@Model.Desc</p>
+                                <small><a href="marketing-single.html" title="">@Model.Date.ToString("dd-MM-yyy")</a></small>
+                            </div><!-- end meta -->
+                        </div><!-- end blog-box -->
+
+                        <hr class="invis">
+                    
+                </div><!-- end blog-box -->
+            </div>
+        </div>
+    </div>
+</div>
+

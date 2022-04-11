@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace MyFinalProject.Controllers
 {
    
+
     public class AccountController : Controller
     {
         private readonly ProjectContext _context;
@@ -174,7 +175,6 @@ namespace MyFinalProject.Controllers
 
             return RedirectToAction("Login");
         }
-
         [Authorize(Roles = "Member")]
         public IActionResult Profile()
         {
@@ -196,7 +196,27 @@ namespace MyFinalProject.Controllers
             };
             return View(profileVM);
         }
-        [Authorize(Roles = "Member")]
+        public IActionResult Edit()
+        {
+            AppUser member = _userManager.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+            if (member is null)
+                return NotFound();
+
+            MemberUpdateViewModel profileVM = new MemberUpdateViewModel
+            {
+               
+                    FullName = member.FullName,
+                    Address = member.Address,
+                    City = member.City,
+                    Country = member.Country,
+                    Email = member.Email,
+                    Phone = member.PhoneNumber,
+                    UserName = member.UserName
+                
+            };
+            return View(profileVM);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> Edit(MemberUpdateViewModel memberVM)
         {
@@ -207,9 +227,7 @@ namespace MyFinalProject.Controllers
             };
 
             if (!ModelState.IsValid) {
-                Console.WriteLine(ModelState);
-                return View("Profile", profileVM);
-
+                return View();
             }
 
             AppUser member = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -217,13 +235,13 @@ namespace MyFinalProject.Controllers
             if (member.UserName != memberVM.UserName && _userManager.Users.Any(x => x.NormalizedUserName == memberVM.UserName.ToUpper()))
             {
                 ModelState.AddModelError("UserName", "UserName has already taken");
-                return View("Profile", profileVM);
+                return View();
             }
 
             if (member.Email != memberVM.Email && _userManager.Users.Any(x => x.NormalizedEmail == memberVM.Email.ToUpper()))
             {
                 ModelState.AddModelError("Email", "Email has already taken");
-                return View("Profile", profileVM);
+                return View();
             }
 
             member.Email = memberVM.Email;
@@ -241,7 +259,7 @@ namespace MyFinalProject.Controllers
                 {
                     ModelState.AddModelError("", item.Description);
                 }
-                return View("Profile", profileVM);
+                return View();
             }
 
             if (memberVM.Password != null)
@@ -249,13 +267,13 @@ namespace MyFinalProject.Controllers
                 if (string.IsNullOrWhiteSpace(memberVM.CurrentPassword))
                 {
                     ModelState.AddModelError("CurrentPassword", "CurrentPassword is required!");
-                    return View("Profile", profileVM);
+                    return View();
                 }
 
                 if (!await _userManager.CheckPasswordAsync(member, memberVM.CurrentPassword))
                 {
                     ModelState.AddModelError("CurrentPassword", "CurrentPassword is incorrect!");
-                    return View("Profile", profileVM);
+                    return View();
                 }
 
                 var passResult = _userManager.ChangePasswordAsync(member, memberVM.CurrentPassword, memberVM.Password);
@@ -266,7 +284,7 @@ namespace MyFinalProject.Controllers
                     {
                         ModelState.AddModelError("Password", item.Description);
                     }
-                    return View("Profile", profileVM);
+                    return View();
                 }
 
             }

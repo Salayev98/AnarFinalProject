@@ -1,0 +1,52 @@
+﻿@model OurTeam
+@{ ViewData["Title"] = "Create"; }
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1>Create</h1>
+            <form asp-action="create" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+
+                    <label asp-for="Name">Name</label>
+                    <input class="form-control" asp-for="Name" placeholder="Enter Name">
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Position">Position</label>
+                    <input class="form-control" asp-for="Position" placeholder="Enter Position">
+                    <span class="text-danger" asp-validation-for="Position"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FacebookUrl">Fburl</label>
+                    <input class="form-control" asp-for="FacebookUrl" placeholder="Enter FacebookUrl">
+                    <span class="text-danger" asp-validation-for="FacebookUrl"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TwitterUrl">Twiturl</label>
+                    <input class="form-control" asp-for="TwitterUrl" placeholder="Enter TwitterUrl">
+                    <span class="text-danger" asp-validation-for="TwitterUrl"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GoogleUrl">Googleurl</label>
+                    <input class="form-control" asp-for="GoogleUrl" placeholder="Enter GoogleUrl">
+                    <span class="text-danger" asp-validation-for="GoogleUrl"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="YoutubeUrl">Youtubeurl</label>
+                    <input class="form-control" asp-for="YoutubeUrl" placeholder="Enter YoutubeUrl">
+                    <span class="text-danger" asp-validation-for="YoutubeUrl"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ImageFile">Image</label>
+                    <input class="form-control" asp-for="ImageFile" placeholder="Enter Image">
+                    <span class="text-danger" asp-validation-for="ImageFile"></span>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -29,6 +29,10 @@ namespace MyFinalProject.Services
         {
             return _context.Settings.ToDictionary(x => x.Key, x => x.Value);
         }
+        public List<Product> GetProduct()
+        {
+            return _context.Products.ToList();
+        }
 
         public BasketViewModel GetBasket()
         {

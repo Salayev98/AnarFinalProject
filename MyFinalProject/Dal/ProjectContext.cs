@@ -30,6 +30,9 @@ namespace MyFinalProject.Dal
         public DbSet<WishListItem> WishListItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OurTeam> OurTeams { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Fags> Fagses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductConfiguration());

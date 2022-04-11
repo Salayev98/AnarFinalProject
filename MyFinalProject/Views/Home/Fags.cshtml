@@ -1,0 +1,98 @@
+﻿@model List<Fags>
+    <main style="padding: 50px;">
+        <div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrap text-center">
+                            <nav aria-label="breadcrumb">
+                                <h1 class="breadcrumb-title">Frequently Asked Questions</h1>
+                                <ul class="breadcrumb">
+                                    <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Frequently Asked Questions</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section id="fag-area">
+                    <div class="fag-content">
+                        <div class="fag-title">
+                            <h3>Shipping Information</h3>
+                        </div>
+                        <div style="padding: 20px; border: 1px solid black;" class="informations">
+                            <div class="row">
+                                @foreach (var item in Model.Where(x => x.isShipping == true))
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="info-title">
+                                            <h3>@item.Title</h3>
+                                        </div>
+                                        <div class="info-content">
+                                            <p>
+                                                @item.Information
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="fag-content">
+                        <div class="fag-title">
+                            <h3>Payment Information</h3>
+                        </div>
+                        <div style="padding: 20px; border: 1px solid black;" class="informations">
+                            <div class="row">
+                                @foreach (var item in Model.Where(x => x.isPayment == true))
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="info-title">
+                                            <h3>@item.Title</h3>
+                                        </div>
+                                        <div class="info-content">
+                                            <p>
+                                                @item.Information
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="fag-content">
+                        <div class="fag-title">
+                            <h3>Order Information</h3>
+                        </div>
+                        <div style="padding: 20px; border: 1px solid black;" class="informations">
+                            <div class="row">
+                                @foreach (var item in Model.Where(x => x.isOrder == true))
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="info-title">
+                                            <h3>@item.Title</h3>
+                                        </div>
+                                        <div class="info-content">
+                                            <p>
+                                                @item.Information
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
+   

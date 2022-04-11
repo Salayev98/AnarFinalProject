@@ -33,7 +33,7 @@ namespace MyFinalProject.Controllers
             ViewBag.FilterbyMin = minprice;
             ViewBag.FilterbyMax = maxprice;
             ProductViewModel productVM = new ProductViewModel();
-            var products = _context.Products.Include(x => x.ProductImages).Include(x => x.ProductColors).ThenInclude(x => x.Color).AsQueryable();
+            var products = _context.Products.Include(x => x.ProductImages).Include(x => x.ProductColors).ThenInclude(x => x.Color).Include(x=>x.Comments).AsQueryable();
             if (brandid != null)
             {
                 products = products.Where(x => x.BrandId == brandid);
@@ -259,7 +259,7 @@ namespace MyFinalProject.Controllers
             ProductDetailViewModel prodVM = new ProductDetailViewModel
             {
                 Product = product,
-                RelatedProdcts = _context.Products.Include(x => x.ProductImages).Where(x => x.BrandId == product.BrandId).ToList(),
+                RelatedProdcts = _context.Products.Include(x => x.ProductImages).Include(x => x.Comments).Where(x => x.BrandId == product.BrandId).ToList(),
                 Comment = new ProductComment { ProductId = id }
             };
             return View(prodVM);
@@ -276,15 +276,15 @@ namespace MyFinalProject.Controllers
             {
                 return RedirectToAction("login", "account");
             }
-
+            Product product = _context.Products
+               .Include(x => x.Brand)
+               .Include(x => x.Comments)
+               .ThenInclude(x => x.AppUser)
+               .Include(x => x.ProductImages)
+               .Include(x => x.ProductColors).ThenInclude(x => x.Color).FirstOrDefault(x => x.Id == comment.ProductId);
             if (!ModelState.IsValid)
             {
-                Product product = _context.Products
-                .Include(x => x.Brand)
-                .Include(x => x.Comments)
-                .ThenInclude(x => x.AppUser)
-                .Include(x => x.ProductImages)
-                .Include(x => x.ProductColors).ThenInclude(x => x.Color).FirstOrDefault(x => x.Id == comment.ProductId);
+               
                 ProductDetailViewModel prodVM = new ProductDetailViewModel
                 {
                     Product = product,
@@ -299,6 +299,7 @@ namespace MyFinalProject.Controllers
             }
             comment.AppUserId = member.Id;
             comment.CreatedAt = DateTime.UtcNow.AddHours(4);
+            product.Rate = (int)Math.Ceiling(product.Comments.Sum(x => x.Rate) / (double)product.Comments.Count);
             _context.ProductComments.Add(comment);
             _context.SaveChanges();
             return RedirectToAction("ProductDetail", new { id = comment.ProductId });

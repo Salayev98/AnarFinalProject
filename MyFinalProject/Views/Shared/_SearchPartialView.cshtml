@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Product>
+
+@foreach (var product in Model)
+{
+<div class="container dropdown-item">
+    <div class="row">
+        <div class="col-lg-2 item-thumbnail" >
+            <img src="~/upload/product/@product.ProductImages.ElementAt(0).ImageUrl" alt="image" style="width:50px; height:50px" class="profile-pic">
+        </div>
+        <div class="col-lg-7 item-content" >
+            <h6 class="ellipsis font-weight-normal" style="padding-top:15px;">
+                @product.Name.Substring(0, 30) ...
+            </h6>
+        </div>
+        <div class="col-lg-2" >
+            <h6 class="ellipsis font-weight-normal" style="padding-top:15px;">
+                @product.SalePrice.ToString("C2")
+            </h6>
+        </div>
+        <div class="col-lg-1">
+            <h6 class="ellipsis font-weight-normal" style="padding-top:15px;"><a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@product.Id"><i class="fas fa-shopping-basket"></i></a></h6>
+        </div>
+     </div>
+
+</div>
+}

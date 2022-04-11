@@ -9,10 +9,8 @@
             <div class="col-lg-2">
                 <div style="border: 1px solid black;" class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="v-pills-dashboard-tab" data-toggle="pill" href="#v-pills-dashboard" role="tab" aria-controls="v-pills-dashboard" aria-selected="true">DashBoard</a>
-                    <a class="nav-link" id="v-pills-edit-profile-tab" data-toggle="pill" href="#v-pills-edit-profile" role="tab" aria-controls="v-pills-edit-profile" aria-selected="false">Edit Profile</a>
                     <a class="nav-link" id="v-pills-order-h-tab" data-toggle="pill" href="#v-pills-order-h" role="tab" aria-controls="v-pills-order-h" aria-selected="false">Order History</a>
-                    <a class="nav-link" id="v-pills-password-tab" data-toggle="pill" href="#v-pills-password" role="tab" aria-controls="v-pills-password" aria-selected="false">Password</a>
-                    <a class="nav-link" href="">Logout</a>
+                    <a class="nav-link" asp-controller="account" asp-action="logout">Logout</a>
                 </div>
             </div>
             <div class="col-lg-10">
@@ -28,7 +26,7 @@
                                         <div class="user-email">
                                             <p>@Model.Member.Email</p>
                                         </div>
-                                       
+                                        <a class="btn btn-primary" asp-action="edit">Edit</a>
                                     </div>
                                 </div>
                             </div>
@@ -55,9 +53,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="v-pills-edit-profile" role="tabpanel" aria-labelledby="v-pills-edit-profile-tab">
-                        @Html.Partial("_ProfileEditPartial", @Model.Member)
                     </div>
                     <div class="tab-pane fade" id="v-pills-order-h" role="tabpanel" aria-labelledby="v-pills-order-h-tab">
                         <div style="padding:30px;border:1px solid black" class="order-history">
@@ -125,11 +120,6 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="v-pills-password" role="tabpanel" aria-labelledby="v-pills-password-tab">
-                        @Html.Partial("_PasswordPartial",@Model.Member)
-
-                    </div>
-
                 </div>
             </div>
         </div>

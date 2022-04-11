@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using MyFinalProject.Areas.Manage.ViewModels;
 using MyFinalProject.Dal;
 using MyFinalProject.Models;
@@ -34,7 +35,7 @@ namespace MyFinalProject.Areas.Manage.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(AdminRegisterViewModel adminVm)
+        public async Task<IActionResult> Register(AdminRegisterViewModel adminVm)
         {
             if (!ModelState.IsValid)
             {
@@ -72,5 +73,99 @@ namespace MyFinalProject.Areas.Manage.Controllers
             await _userManager.AddToRoleAsync(adminrole, "Admin");
             return RedirectToAction("index", "dashboard");
         }
+        public IActionResult Index(int page=1)
+        {
+            
+            var admin = _context.AppUsers
+                .Where(x=>x.IsAdmin==true)
+                .AsQueryable();
+            return View(PaginatedList<AppUser>.Create(admin, 3, page));
+        }
+        public IActionResult Edit(string id)
+        {
+            AppUser admin = _context.AppUsers
+               .Where(x => x.IsAdmin == true).FirstOrDefault(x => x.Id == id);
+
+            if (admin == null)
+            {
+                return NotFound();
+            }
+            AdminUpdateViewModel adminVm = new AdminUpdateViewModel
+            {
+                FullName = admin.FullName,
+                Email = admin.Email,
+                Username = admin.UserName
+            };
+        
+            
+
+
+            return View(adminVm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(AdminUpdateViewModel proVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            AppUser member = await _userManager.FindByNameAsync(proVM.Username);
+
+            if (member.Email != proVM.Email && _userManager.Users.Any(x => x.NormalizedEmail == proVM.Email.ToUpper()))
+            {
+                ModelState.AddModelError("Email", "Email has already taken");
+                return View();
+            }
+
+            member.Email = proVM.Email;
+            member.FullName = proVM.FullName;
+
+
+            if (proVM.Password != null)
+            {
+                var passResult = _userManager.RemovePasswordAsync(member);
+
+                if (passResult.Result.Succeeded)
+                {
+                    passResult =  _userManager.AddPasswordAsync(member, proVM.Password);
+                    if (passResult.Result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+
+                    foreach (var item in passResult.Result.Errors)
+                    {
+                        ModelState.AddModelError("Password", item.Description);
+                    }
+                    return View();
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction("index");
+        }
+
+        public IActionResult Delete(string id)
+        {
+            AppUser admin = _context.AppUsers.FirstOrDefault(x => x.Id == id);
+            return View(admin);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(AppUser admin)
+        {
+
+            AppUser existappuser = _context.AppUsers.FirstOrDefault(x => x.Id == admin.Id);
+            if (existappuser == null)
+            {
+                return NotFound();
+            }
+            _context.AppUsers.Remove(existappuser);
+            _context.SaveChanges();
+            return RedirectToAction("index");
+        }
+
     }
 }

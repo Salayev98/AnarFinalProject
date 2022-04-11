@@ -42,5 +42,4 @@
                 $(".wish-table").html(data);
             });
     })
-   
 })

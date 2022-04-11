@@ -9,6 +9,7 @@ namespace MyFinalProject.ViewModels
     public class ProductDetailViewModel
     {
         public Product Product { get; set; }
+        public ProductColor ProductColor { get; set; }
         public List<Product> RelatedProdcts { get; set; }
         public ProductComment Comment { get; set; }
     }

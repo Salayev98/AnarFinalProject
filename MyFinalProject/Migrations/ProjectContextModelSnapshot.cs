@@ -341,6 +341,68 @@ namespace MyFinalProject.Migrations
                     b.ToTable("Colors");
                 });
 
+            modelBuilder.Entity("MyFinalProject.Models.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Models.Fags", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Information")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("isOrder")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isPayment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isShipping")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Fagses");
+                });
+
             modelBuilder.Entity("MyFinalProject.Models.Feature", b =>
                 {
                     b.Property<int>("Id")
@@ -470,6 +532,39 @@ namespace MyFinalProject.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("MyFinalProject.Models.OurTeam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FacebookUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TwitterUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YoutubeUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OurTeams");
+                });
+
             modelBuilder.Entity("MyFinalProject.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -537,6 +632,9 @@ namespace MyFinalProject.Migrations
                     b.Property<int>("NumberofSpeeds")
                         .HasColumnType("int");
 
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18,2)");
 
@@ -545,6 +643,9 @@ namespace MyFinalProject.Migrations
 
                     b.Property<int>("Width")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isAvailable")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -645,8 +746,8 @@ namespace MyFinalProject.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(10000);
 
                     b.HasKey("Id");
 

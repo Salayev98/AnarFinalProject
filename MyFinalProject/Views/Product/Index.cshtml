@@ -1,7 +1,7 @@
 ﻿@model ProductViewModel
 <main>
     <!-- breadcrumb area start -->
-    <div class="shop-area bg-img" >
+    <div style="margin:30px" class="shop-area bg-img" >
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -107,26 +107,35 @@
                                     <div class="product-item mb-53">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Id">
-                                                <img src="~/assets/images/products/@item.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
+                                                <img src="~/upload/product/@item.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
-                                            <h5 class="product-name">
+                                            <h5 class="product-name search-product">
                                                 <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Id">@item.Name</a>
                                             </h5>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= item.Rate)
+                                                    {
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                    }
+                                                }
+                                                @item.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((item.SalePrice*(1-item.DiscountPercent/100)).ToString("0.00"))</span>
                                                 <span class="price-old"><del>$@item.SalePrice</del></span>
                                             </div>
                                             <div class="product-link">
+                                              
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@item.Id">Add to Cart</a>
                                                 <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@item.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@item.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
@@ -142,13 +151,17 @@
                         <!-- start pagination area -->
                         <div style="margin:10px 0" class="paginatoin-area text-center mt-45">
                             <ul class="pagination-box">
-                                <li><a class="Previous" href="#"><i class="fas fa-arrow-alt-circle-left"></i></a></li>
+                                <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="1">@("<<")</a></li>
+                                <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@(ViewBag.Page-1)">@("<")</a></li>
                                 @for (int i = 1; i <= ViewBag.TotalPage; i++)
                                 {
                                     <li class="@(ViewBag.Page==i?"active":"")"><a asp-action="index" asp-route-page="@i" asp-route-categoryid="@ViewBag.CategryId" asp-route-brandid="@ViewBag.BrandId" asp-route-colorid="@ViewBag.Color">@i</a></li>
                                 }
 
-                                <li><a class="Next" href="#"><i class="fas fa-arrow-alt-circle-right"></i></a></li>
+                                @if (ViewBag.Page < ViewBag.TotalPage)
+                                {
+                            <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@(ViewBag.Page+1)">></a></li>
+                                            <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@ViewBag.TotalPage">>></a></li>}
                             </ul>
                         </div>
                         <!-- end pagination area -->
@@ -189,5 +202,4 @@
 
         })
     </script>
-
 }

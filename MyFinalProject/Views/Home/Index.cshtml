@@ -19,7 +19,7 @@
                             @foreach (var slider in Model.Sliders)
                             {
                                 <div class="carousel-item @(count==0?"active":"") ">
-                                    <img src="~/assets/images/sliders/@slider.Image" class="d-block w-100" alt="...">
+                                    <img src="~/upload/slider/@slider.Image" class="d-block w-100" alt="...">
                                     <div class="slider-content">
                                         <h1>@slider.Title1 <br> @slider.Title2</h1>
                                         <p>@slider.Desc1</p>
@@ -103,14 +103,14 @@
                         <!-- first tab-pane -->
                         <div class="tab-pane fade show active" id="pills-all" role="tabpanel"
                              aria-labelledby="pills-all-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products ">
 
-                                @foreach (var product in Model.Products)
+                                @foreach (var product in Model.Products.Take(4))
 	{
                                 <div class="product-item mb-50">
                                     <div class="product-thumb">
                                         <a asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">
-                                            <img src="~/assets/images/products/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            <img src="~/upload/product/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -118,12 +118,20 @@
                                             <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">@product.Name</a>
                                         </div>
                                         <div class="product-review">
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            12 Reviews
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= product.Rate)
+                                                {
+                                                    <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                }
+                                            }
+                                            @product.Comments.Count Reviews
                                         </div>
                                         <div class="price-box">
                                             <span class="price-regular">$@((product.SalePrice*(1-product.DiscountPercent/100)).ToString("0.00"))</span>
@@ -131,7 +139,7 @@
                                         </div>
                                         <div class="product-action-link">
                                             <a class="button add-to-basket"asp-controller="product" asp-action="addtobasket" asp-route-id="@product.Id">Add to Cart</a>
-                                            <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                            <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@product.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                             <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#quick_view" ><span><i class="fas fa-eye"></i></span></a>
                                         </div>
                                     </div>
@@ -142,14 +150,14 @@
                         </div>
                         <!-- second tab-pane -->
                         <div class="tab-pane fade" id="pills-power" role="tabpanel" aria-labelledby="pills-power-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products">
 
-                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools"))
+                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools").Take(4))
                                 {
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">
-                                                <img src="~/assets/images/products/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                <img src="~/upload/product/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -157,12 +165,21 @@
                                                 <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">@powerproduct.Name</a>
                                             </div>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                               
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= powerproduct.Rate)
+                                                        {
+                                                            <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                        }
+                                                    }
+                                                @powerproduct.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((powerproduct.SalePrice*(1-powerproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -170,7 +187,7 @@
                                             </div>
                                             <div class="product-action-link">
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@powerproduct.Id">Add to Cart</a>
-                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@powerproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@powerproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                             </div>
                                         </div>
@@ -181,14 +198,14 @@
                         </div>
                         <!-- third tab-pane -->
                         <div class="tab-pane fade" id="pills-hand" role="tabpanel" aria-labelledby="pills-hand-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products ">
 
-                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools"))
+                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools").Take(4))
 	{
                                 <div class="product-item mb-50">
                                     <div class="product-thumb">
                                         <a asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">
-                                            <img src="~/assets/images/products/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                            <img src="~/upload/product/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -196,12 +213,20 @@
                                             <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">@handproduct.Name</a>
                                         </div>
                                         <div class="product-review">
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            12 Reviews
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= handproduct.Rate)
+                                                {
+                                                    <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                }
+                                            }
+                                            @handproduct.Comments.Count Reviews
                                         </div>
                                         <div class="price-box">
                                             <span class="price-regular">$@((handproduct.SalePrice*(1-handproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -209,7 +234,7 @@
                                         </div>
                                         <div class="product-action-link">
                                             <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@handproduct.Id">Add to Cart</a>
-                                            <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                            <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@handproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                             <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@handproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                         </div>
                                     </div>
@@ -219,14 +244,14 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-plumbing" role="tabpanel" aria-labelledby="pills-plumbing-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products">
 
-                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing"))
+                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing").Take(4))
                                 {
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">
-                                                <img src="~/assets/images/products/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                <img src="~/upload/product/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -234,12 +259,20 @@
                                                 <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">@plumbproduct.Name</a>
                                             </div>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= plumbproduct.Rate)
+                                                    {
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                    }
+                                                }
+                                                @plumbproduct.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((plumbproduct.SalePrice*(1-plumbproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -247,7 +280,7 @@
                                             </div>
                                             <div class="product-action-link">
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@plumbproduct.Id">Add to Cart</a>
-                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@plumbproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@plumbproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                             </div>
                                         </div>
@@ -272,7 +305,7 @@
                         <div class="content">
                             <p>Hammers,Chisels,Universal Pliers,Nippers,Jigsaws,Saws</p>
                         </div>
-                        <a class="button">Shop Now</a>
+                        <a asp-controller="product" asp-action="index">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -288,7 +321,7 @@
                         <div class="product-banner mb-50">
                             <div class="product-thumb">
                                 <a asp-controller="product" asp-action="productdetail" asp-route-id="@bestpro.Id">
-                                    <img src="~/assets/images/products/@bestpro.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                    <img src="~/upload/product/@bestpro.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                 </a>
                             </div>
                             <div class="product-content">
@@ -296,12 +329,20 @@
                                     <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@bestpro.Id">@bestpro.Name</a>
                                 </div>
                                 <div class="product-review">
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    12 Reviews
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= bestpro.Rate)
+                                        {
+                                            <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                        }
+                                        else
+                                        {
+                                            <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                        }
+                                    }
+                                    @bestpro.Comments.Count Reviews
                                 </div>
                                 <div class="price-box">
                                     <span class="price-regular">$@((bestpro.SalePrice*(1-bestpro.DiscountPercent/100)).ToString("0.00"))</span>
@@ -309,7 +350,7 @@
                                 </div>
                                 <div class="product-action-link">
                                     <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@bestpro.Id">Add to Cart</a>
-                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                    <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@bestpro.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                     <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@bestpro.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                 </div>
                             </div>
@@ -323,7 +364,7 @@
                         <div class="product-item mb-50">
                             <div class="product-thumb">
                                 <a asp-controller="product" asp-action="productdetail" asp-route-id="@best.Id">
-                                    <img src="~/assets/images/products/@best.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                    <img src="~/upload/product/@best.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                 </a>
                             </div>
                             <div class="product-content">
@@ -331,12 +372,20 @@
                                     <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@best.Id">@best.Name</a>
                                 </div>
                                 <div class="product-review">
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    <span><i class="fas fa-star"></i></span>
-                                    12 Reviews
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= best.Rate)
+                                        {
+                                            <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                        }
+                                        else
+                                        {
+                                            <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                        }
+                                    }
+                                    @best.Comments.Count Reviews
                                 </div>
                                 <div class="price-box">
                                     <span class="price-regular">$@((best.SalePrice*(1-best.DiscountPercent/100)).ToString("0.00"))</span>
@@ -344,7 +393,7 @@
                                 </div>
                                 <div class="product-action-link">
                                     <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@best.Id">Add to Cart</a>
-                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                    <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@best.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                     <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@best.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                 </div>
                             </div>
@@ -381,7 +430,7 @@
                                         
                                     </div>
                                 <div class="card-button">
-                                    <a class="button" href="">Show All</a>
+                                    <a class="button" asp-controller="product" asp-action="index">Show All</a>
                                 </div>
                             </div>
                         </div>
@@ -428,14 +477,14 @@
                         <!-- first tab-pane -->
                         <div class="tab-pane fade show active" id="pills-alll" role="tabpanel"
                              aria-labelledby="pills-all-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products">
 
-                                @foreach (var product in Model.Products.Where(x=>x.IsNew))
+                                @foreach (var product in Model.Products.Where(x=>x.IsNew).Take(4))
                                 {
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">
-                                                <img src="~/assets/images/products/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                <img src="~/upload/product/@product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -443,12 +492,20 @@
                                                 <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@product.Id">@product.Name</a>
                                             </div>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= product.Rate)
+                                                    {
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                    }
+                                                }
+                                                @product.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((product.SalePrice*(1-product.DiscountPercent/100)).ToString("0.00"))</span>
@@ -456,7 +513,7 @@
                                             </div>
                                             <div class="product-action-link">
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@product.Id">Add to Cart</a>
-                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@product.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                             </div>
                                         </div>
@@ -467,14 +524,14 @@
                         </div>
                         <!-- second tab-pane -->
                         <div class="tab-pane fade" id="pills-powerr" role="tabpanel" aria-labelledby="pills-power-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products">
 
-                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools"))
+                                @foreach (var powerproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "power tools").Take(4))
                                 {
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">
-                                                <img src="~/assets/images/products/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                <img src="~/upload/product/@powerproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -482,12 +539,20 @@
                                                 <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@powerproduct.Id">@powerproduct.Name</a>
                                             </div>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= powerproduct.Rate)
+                                                    {
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                    }
+                                                }
+                                                @powerproduct.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((powerproduct.SalePrice*(1-powerproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -495,7 +560,7 @@
                                             </div>
                                             <div class="product-action-link">
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@powerproduct.Id">Add to Cart</a>
-                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@powerproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@powerproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                             </div>
                                         </div>
@@ -506,14 +571,14 @@
                         </div>
                         <!-- third tab-pane -->
                         <div class="tab-pane fade" id="pills-handd" role="tabpanel" aria-labelledby="pills-hand-tab">
-                            <div class="featured-products slick">
+                            <div class="featured-products">
 
-                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools" && x.IsNew))
+                                @foreach (var handproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "hand tools" && x.IsNew).Take(4))
                                 {
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">
-                                                <img src="~/assets/images/products/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                <img src="~/upload/product/@handproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -521,12 +586,20 @@
                                                 <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@handproduct.Id">@handproduct.Name</a>
                                             </div>
                                             <div class="product-review">
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                <span><i class="fas fa-star"></i></span>
-                                                12 Reviews
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= handproduct.Rate)
+                                                    {
+                                                        <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                    }
+                                                }
+                                                @handproduct.Comments.Count Reviews
                                             </div>
                                             <div class="price-box">
                                                 <span class="price-regular">$@((handproduct.SalePrice*(1-handproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -534,7 +607,7 @@
                                             </div>
                                             <div class="product-action-link">
                                                 <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@handproduct.Id">Add to Cart</a>
-                                                <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@handproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                 <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@handproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                             </div>
                                         </div>
@@ -544,14 +617,14 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="pills-plumbingg" role="tabpanel" aria-labelledby="pills-plumbing-tab">
-                            <div class="featured-products slick">
-                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing" &&x.IsNew))
+                            <div class="featured-products">
+                                @foreach (var plumbproduct in Model.Products.Where(x => x.Category.Name.ToLower() == "plumbing" &&x.IsNew).Take(4))
                         
                                     {
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">
-                                                    <img src="~/assets/images/products/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                                    <img src="~/upload/product/@plumbproduct.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -559,12 +632,20 @@
                                                     <a style="text-decoration: none; color: black;" asp-controller="product" asp-action="productdetail" asp-route-id="@plumbproduct.Id">@plumbproduct.Name</a>
                                                 </div>
                                                 <div class="product-review">
-                                                    <span><i class="fas fa-star"></i></span>
-                                                    <span><i class="fas fa-star"></i></span>
-                                                    <span><i class="fas fa-star"></i></span>
-                                                    <span><i class="fas fa-star"></i></span>
-                                                    <span><i class="fas fa-star"></i></span>
-                                                    12 Reviews
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= plumbproduct.Rate)
+                                                        {
+                                                            <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                        }
+                                                    }
+                                                    @plumbproduct.Comments.Count Reviews
                                                 </div>
                                                 <div class="price-box">
                                                     <span class="price-regular">$@((plumbproduct.SalePrice*(1-plumbproduct.DiscountPercent/100)).ToString("0.00"))</span>
@@ -572,7 +653,7 @@
                                                 </div>
                                                 <div class="product-action-link">
                                                     <a class="button add-to-basket" asp-controller="product" asp-action="addtobasket" asp-route-id="@plumbproduct.Id">Add to Cart</a>
-                                                    <a href=""><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
+                                                    <a asp-controller="product" asp-action="addtowishlist" asp-route-id="@plumbproduct.Id" class="add-wish"><span style="padding-left: 50px;"><i class="far fa-heart"></i></span></a>
                                                     <a class="open-modal" asp-action="getproducts" asp-controller="product" asp-route-id="@plumbproduct.Id" data-bs-toggle="modal" data-bs-target="#quick_view"><span><i class="fas fa-eye"></i></span></a>
                                                 </div>
                                             </div>
@@ -629,22 +710,32 @@
                         <div style="height:145px;" class="card-product">
                             <div class="row">
                                 <div class="col-lg-5">
-                                    <div class="card-image">
-                                        <img style="width: 100%;" src="~/assets/images/products/@top.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
-                                    </div>
+                                    <a asp-controller="product" asp-action="productdetail" asp-route-id="@top.Id">
+                                        <img src="~/upload/product/@top.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                    </a>
                                 </div>
                                 <div class="col-lg-7">
                                     <div class="card-content">
-                                        <div class="product-name">
-                                            <h5>@top.Name</h5>
-                                        </div>
+                                        <a style="text-decoration: none; color: black" asp-controller="product" asp-action="productdetail" asp-route-id="@top.Id">
+                                            <div class="product-name">
+                                                <h5>@top.Name</h5>
+                                            </div>
+                                        </a>
                                         <div class="product-rate">
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            12 Reviews
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= top.Rate)
+                                                {
+                                                    <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                }
+                                            }
+                                            @top.Comments.Count Reviews
                                         </div>
                                         <div class="product-price">
                                             <span class="price-regular">$@((top.SalePrice*(1-top.DiscountPercent/100)).ToString("0.00"))</span>
@@ -665,22 +756,32 @@
                         <div style="height:145px;" class="card-product">
                             <div class="row">
                                 <div class="col-lg-5">
-                                    <div class="card-image">
-                                        <img style="width: 100%;" src="~/assets/images/products/@special.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
-                                    </div>
+                                    <a  asp-controller="product" asp-action="productdetail" asp-route-id="@special.Id">
+                                        <img src="~/upload/product/@special.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                    </a>
                                 </div>
                                 <div class="col-lg-7">
                                     <div class="card-content">
-                                        <div class="product-name">
-                                            <h5>@special.Name</h5>
-                                        </div>
+                                        <a style="text-decoration: none; color: black" asp-controller="product" asp-action="productdetail" asp-route-id="@special.Id">
+                                            <div class="product-name">
+                                                <h5>@special.Name</h5>
+                                            </div>
+                                        </a>
                                         <div class="product-rate">
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            12 Reviews
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= special.Rate)
+                                                {
+                                                    <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                }
+                                            }
+                                            @special.Comments.Count Reviews
                                         </div>
                                         <div class="product-price">
                                             <span class="price-regular">$@((special.SalePrice*(1-special.DiscountPercent/100)).ToString("0.00"))</span>
@@ -701,27 +802,38 @@
                         <div style="height:145px;" class="card-product">
                             <div class="row">
                                 <div class="col-lg-5">
-                                    <div class="card-image">
-                                        <img style="width: 100%;" src="~/assets/images/products/@bestseller.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="">
-                                    </div>
+                                    <a asp-controller="product" asp-action="productdetail" asp-route-id="@bestseller.Id">
+                                        <img src="~/upload/product/@bestseller.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" style="width:100%" alt="">
+                                    </a>
                                 </div>
                                 <div class="col-lg-7">
                                     <div class="card-content">
-                                        <div class="product-name">
-                                            <h5>@bestseller.Name</h5>
-                                        </div>
+                                        <a style="text-decoration:none; color:black" asp-controller="product" asp-action="productdetail" asp-route-id="@bestseller.Id">
+                                            <div class="product-name">
+                                                <h5>@bestseller.Name</h5>
+                                            </div>
+                                        </a>
+                                            
                                         <div class="product-rate">
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            <span><i class="fas fa-star"></i></span>
-                                            12 Reviews
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= bestseller.Rate)
+                                                {
+                                                    <span><i style="color: yellow;" class="fas fa-star"></i></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span><i style="color: yellow;" class="far fa-star"></i></span>
+
+                                                }
+                                            }
+                                            @bestseller.Comments.Count Reviews
                                         </div>
-                                        <div class="product-price">
-                                            <span class="price-regular">$@((bestseller.SalePrice*(1-bestseller.DiscountPercent/100)).ToString("0.00"))</span>
-                                            <span class="price-old"><del>$@bestseller.SalePrice</del></span>
-                                        </div>
+                                            <div class="product-price">
+                                                <span class="price-regular">$@((bestseller.SalePrice*(1-bestseller.DiscountPercent/100)).ToString("0.00"))</span>
+                                                <span class="price-old"><del>$@bestseller.SalePrice</del></span>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

@@ -15,7 +15,7 @@
                         <li class="minicart-item">
                             <div class="minicart-thumbb">
                                 <a asp-controller="product" asp-action="productdetail" asp-route-id="@item.Product.Id">
-                                    <img style="width: 84px;" src="~/assets/images/products/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="product">
+                                    <img style="width: 84px;" src="~/upload/product/@item.Product.ProductImages.FirstOrDefault(x=>x.PosterStatus==true)?.ImageUrl" alt="product">
                                 </a>
                             </div>
                             <div class="minicart-content">
@@ -46,8 +46,8 @@
             </div>
 
             <div style="width: 70%; margin: 27px;" class="minicart-button">
-                <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
-                <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
+                <a asp-controller="product" asp-action="cart"><i class="fa fa-shopping-cart"></i> view cart</a>
+                <a asp-controller="order" asp-action="checkout"><i class="fa fa-share"></i> checkout</a>
             </div>
         </div>
     </div>

@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Controllers
 {
+    [Authorize(Roles = "Member")]
+
     public class OrderController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -24,7 +26,6 @@ namespace MyFinalProject.Controllers
             _userManager = userManager;
             _context = context;
         }
-        [Authorize(Roles = "Member")]
         public IActionResult Checkout()
         {
             AppUser member = null;
@@ -109,7 +110,7 @@ namespace MyFinalProject.Controllers
             order.AppUserId = member?.Id;
             order.CreatedAt = DateTime.UtcNow.AddHours(4);
             order.ModifiedAt = DateTime.UtcNow.AddHours(4);
-            order.Status = Enum.OrderStatus.Pending; 
+            order.Status = Enum.OrderStatus.Pending;
 
             order.OrderItems = new List<OrderItem>();
 
